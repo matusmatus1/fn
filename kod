@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortnite Pirate Token Kalkulačka</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #131b2e;
+      --border: #233152;
+      --gold: #f5b041;
+      --gold-glow: rgba(245, 176, 65, 0.25);
+      --blue: #38bdf8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --green: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--gold-glow);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .input-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    label span {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 12px 14px;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--gold);
+    }
+
+    .boost-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .boost-btn {
+      background: #090d16;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 10px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+
+    .boost-btn strong {
+      display: block;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .boost-btn small {
+      font-size: 11px;
+    }
+
+    .boost-btn.active {
+      background: var(--gold-glow);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .boost-btn.active strong {
+      color: var(--gold);
+    }
+
+    .result-box {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .result-label {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .main-percent {
+      font-size: 42px;
+      font-weight: 900;
+      color: var(--gold);
+      margin: 6px 0;
+      text-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #1e293b;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 10px;
+      text-align: left;
+    }
+
+    .stat-card small {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .stat-card strong {
+      font-size: 16px;
+      color: var(--blue);
+    }
+
+    .milestone {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+      font-size: 13px;
+      padding: 12px;
+      border-radius: 10px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="badge">Treasure Hunters</div>
+    <h1>Pirate Shop Token Kalkulačka</h1>
+    <p class="subtitle">Výpočet šance na základe počtu hier a chestiek</p>
+  </div>
+
+  <div class="input-group">
+    <label for="games">Počet odohraných hier</label>
+    <input type="number" id="games" value="50" min="0" step="1">
+  </div>
+
+  <div class="input-group">
+    <label for="chestsPerGame">Priemer chestiek na 1 hru <span>(vrátane squadu)</span></label>
+    <input type="number" id="chestsPerGame" value="18" min="0" step="0.5">
+  </div>
+
+  <label style="margin-bottom: 8px;">Aktívny režim / Šanca na chestku</label>
+  <div class="boost-selector">
+    <div class="boost-btn active" data-mult="1">
+      <strong>1× Normál</strong>
+      <small>1 : 137 500</small>
+    </div>
+    <div class="boost-btn" data-mult="1.5">
+      <strong>1.5× Hour</strong>
+      <small>1 : 91 667</small>
+    </div>
+    <div class="boost-btn" data-mult="2">
+      <strong>2× Special</strong>
+      <small>1 : 68 750</small>
+    </div>
+  </div>
+
+  <div class="result-box">
+    <div class="result-label">Celková šanca, že ti token padne</div>
+    <div class="main-percent" id="chanceDisplay">0.00 %</div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressBar"></div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <small>Spolu otvorených chestiek</small>
+        <strong id="totalChestsDisplay">0</strong>
+      </div>
+      <div class="stat-card">
+        <small>Tvoja reálna šanca</small>
+        <strong id="ratioDisplay">1 : ∞</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="milestone" id="milestoneBox">
+    Na 50 % šancu (coinflip) potrebuješ ešte <strong>0</strong> hier.
+  </div>
+
+  <div class="footer">
+    Vzorec: 1 - (1 - p)ⁿ | Každá truhlica je nezávislý pokus bez pity systému.
+  </div>
+</div>
+
+<script>
+  const BASE_ODDS = 137500;
+  let currentMultiplier = 1;
+
+  const gamesInput = document.getElementById('games');
+  const chestsInput = document.getElementById('chestsPerGame');
+  const boostBtns = document.querySelectorAll('.boost-btn');
+
+  const chanceDisplay = document.getElementById('chanceDisplay');
+  const progressBar = document.getElementById('progressBar');
+  const totalChestsDisplay = document.getElementById('totalChestsDisplay');
+  const ratioDisplay = document.getElementById('ratioDisplay');
+  const milestoneBox = document.getElementById('milestoneBox');
+
+  function formatNumber(num) {
+    return Math.round(num).toLocaleString('sk-SK');
+  }
+
+  function calculate() {
+    const games = Math.max(0, parseFloat(gamesInput.value) || 0);
+    const avgChests = Math.max(0, parseFloat(chestsInput.value) || 0);
+    
+    const totalChests = games * avgChests;
+    const p = currentMultiplier / BASE_ODDS;
+
+    // P(aspon 1) = 1 - (1 - p)^n
+    const winProb = 1 - Math.pow(1 - p, totalChests);
+    const winPercent = winProb * 100;
+
+    // Zobrazenie percent (viac desatinnych miest pri malych cislach)
+    if (winPercent === 0) {
+      chanceDisplay.textContent = '0.00 %';
+    } else if (winPercent < 0.01) {
+      chanceDisplay.textContent = winPercent.toFixed(4) + ' %';
+    } else if (winPercent < 10) {
+      chanceDisplay.textContent = winPercent.toFixed(3) + ' %';
+    } else {
+      chanceDisplay.textContent = winPercent.toFixed(2) + ' %';
+    }
+
+    progressBar.style.width = Math.min(100, winPercent) + '%';
+    totalChestsDisplay.textContent = formatNumber(totalChests);
+
+    // Pomer 1 : X
+    if (winProb > 0) {
+      const oneInX = Math.round(1 / winProb);
+      ratioDisplay.textContent = `1 : ${formatNumber(oneInX)}`;
+    } else {
+      ratioDisplay.textContent = '1 : ∞';
+    }
+
+    // Vypocet poctu hier do 50% sance
+    const chestsFor50 = Math.log(0.5) / Math.log(1 - p);
+    if (avgChests > 0) {
+      const totalGamesFor50 = Math.ceil(chestsFor50 / avgChests);
+      const remainingGames = Math.max(0, totalGamesFor50 - games);
+
+      if (remainingGames === 0) {
+        milestoneBox.innerHTML = `🔥 Už si prekročil 50 % hranicu! Pri tomto priemere stačilo <strong>${formatNumber(totalGamesFor50)}</strong> hier.`;
+      } else {
+        milestoneBox.innerHTML = `Na 50 % šancu potrebuješ odohrať celkovo <strong>${formatNumber(totalGamesFor50)}</strong> hier (ešte <strong>${formatNumber(remainingGames)}</strong>).`;
+      }
+    } else {
+      milestoneBox.innerHTML = `Zadaj priemerný počet chestiek na hru pre výpočet cieľa.`;
+    }
+  }
+
+  boostBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      boostBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMultiplier = parseFloat(btn.dataset.mult);
+      calculate();
+    });
+  });
+
+  gamesInput.addEventListener('input', calculate);
+  chestsInput.addEventListener('input', calculate);
+
+  // Prvy vypocet pri nacitani
+  calculate();
+</script>
+
+</body>
+</html>
